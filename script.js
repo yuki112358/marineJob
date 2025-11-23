@@ -231,34 +231,53 @@ function displayResult(resultKey) {
     resultText.innerHTML = `あなたの適性は ${jobData.title} の系統です！<br>${jobData.desc}`;
 
     // 最終的にたどり着いた職業を詳細表示
-    jobDetails.innerHTML = `
+    let mainResultHtml = `
         <h4>🌟 あなたにおすすめの海の仕事 🌟</h4>
         <h3>${jobData.name}</h3>
         <p>【仕事内容】${jobData.detail}</p>
     `;
+    
+    // jobDetailsにメイン結果を一旦設定
+    jobDetails.innerHTML = mainResultHtml;
 
-    // Local Storageを使ったローカル集計を開始
+    // --- Local Storageを使ったローカル集計 (修正箇所) ---
+    
+    // 1. 今回の結果をLocal Storageに保存
     const baseKey = resultKey.substring(0, resultKey.length - 2); 
-    let currentCount = parseInt(localStorage.getItem(baseKey) || 0);
+    let currentCount = parseInt(localStorage.getItem(baseKey) || '0');
     currentCount++;
     localStorage.setItem(baseKey, currentCount);
 
+    // 2. 集計結果のHTMLを構築
     let aggregationHtml = '<h4>🎉 この端末での集計結果 🎉</h4><ul>';
-    // 集計対象の系統のキーリスト（_Aを付加してresultからtitleを取得するのに使用）
+    
+    // 集計対象の系統のキーリスト
     const allBaseKeys = ['RED_TECH', 'RED_ENV', 'RED_OPT', 'RED_DATA', 'TECH_IT', 'TECH_PREV', 'TECH_STR', 'TECH_CONV', 'FIELD_REP', 'FIELD_FISH', 'FIELD_SAFE', 'FIELD_CON', 'MGT_EXEC', 'MGT_FIN', 'MGT_ESG', 'MGT_PROC'];
     
-    // 修正点: Local Storageから値を取得し、HTMLを組み立てる
+    let totalCount = 0;
+
     allBaseKeys.forEach(key => {
-        const count = parseInt(localStorage.getItem(key) || 0);
-        // 系統名をresultsから取得
+        const count = parseInt(localStorage.getItem(key) || '0');
+        totalCount += count;
+        
+        // 系統名を取得（_Aを付加してresultsからtitleを取得）
         const systemTitle = results[key + '_A'] ? results[key + '_A'].title : key; 
+        
         if (count > 0) {
+            // カウントが0より大きいものだけリストに追加
             aggregationHtml += `<li>${systemTitle}: ${count} 回</li>`;
         }
     });
-    aggregationHtml += '</ul><p>※この集計は、このブラウザ内でのみ保存されます。</p>';
 
-    // 集計結果を結果画面に追加
+    if (totalCount === 0) {
+        // 合計が0の場合は表示しないか、特別なメッセージを表示
+        aggregationHtml = '<p>※最初の回答が完了しました。次回の回答から集計が表示されます。</p>';
+    } else {
+        // リストを閉じ、注意書きを追加
+        aggregationHtml += '</ul><p>※この集計は、このブラウザ内でのみ保存されます。</p>';
+    }
+
+    // 3. jobDetailsに集計結果を追記
     jobDetails.innerHTML += aggregationHtml;
 
     // 表示を切り替え
@@ -275,4 +294,3 @@ function restartQuiz() {
 
 // アプリ起動
 restartQuiz();
-

@@ -228,7 +228,7 @@ function displayResult(resultKey) {
     const jobData = results[resultKey]; 
     
     // 系統名 (title) と説明をセット
-    // 修正点1: <strong>タグを削除し、通常の表示にする
+    // 修正点1: <strong>タグを削除
     resultText.innerHTML = `あなたの適性は ${jobData.title} の系統です！<br>${jobData.desc}`;
 
     // 最終的にたどり着いた職業を詳細表示
@@ -237,6 +237,28 @@ function displayResult(resultKey) {
         <h3>${jobData.name}</h3>
         <p>【仕事内容】${jobData.detail}</p>
     `;
+
+    // Local Storageを使ったローカル集計 (ベース系統名を使用: 例: RED_TECH)
+    const baseKey = resultKey.substring(0, resultKey.length - 2); 
+    let currentCount = parseInt(localStorage.getItem(baseKey) || 0);
+    currentCount++;
+    localStorage.setItem(baseKey, currentCount);
+
+    let aggregationHtml = '<h4>🎉 この端末での集計結果 🎉</h4><ul>';
+    const allBaseKeys = ['RED_TECH', 'RED_ENV', 'RED_OPT', 'RED_DATA', 'TECH_IT', 'TECH_PREV', 'TECH_STR', 'TECH_CONV', 'FIELD_REP', 'FIELD_FISH', 'FIELD_SAFE', 'FIELD_CON', 'MGT_FIN', 'MGT_ESG', 'MGT_PROC', 'MGT_EXEC'];
+    
+    allBaseKeys.forEach(key => {
+        const count = parseInt(localStorage.getItem(key) || 0);
+        // 系統名をresultsから取得 (最初のキーのtitleを使用)
+        const systemTitle = results[key + '_A'] ? results[key + '_A'].title : key; 
+        if (count > 0) {
+            aggregationHtml += `<li><strong>${systemTitle}</strong>: ${count} 回</li>`;
+        }
+    });
+    aggregationHtml += '</ul><p>※この集計は、このブラウザ内でのみ保存されます。</p>';
+
+    // 集計結果を結果画面に追加
+    jobDetails.innerHTML += aggregationHtml;
 
     // 表示を切り替え
     quizContainer.classList.add('hidden');
@@ -251,4 +273,7 @@ function restartQuiz() {
 }
 
 // アプリ起動
+restartQuiz();
+// アプリ起動
+
 restartQuiz();

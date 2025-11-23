@@ -228,7 +228,6 @@ function displayResult(resultKey) {
     const jobData = results[resultKey]; 
     
     // 系統名 (title) と説明をセット
-    // 修正点1: <strong>タグを削除
     resultText.innerHTML = `あなたの適性は ${jobData.title} の系統です！<br>${jobData.desc}`;
 
     // 最終的にたどり着いた職業を詳細表示
@@ -238,21 +237,23 @@ function displayResult(resultKey) {
         <p>【仕事内容】${jobData.detail}</p>
     `;
 
-    // Local Storageを使ったローカル集計 (ベース系統名を使用: 例: RED_TECH)
+    // Local Storageを使ったローカル集計を開始
     const baseKey = resultKey.substring(0, resultKey.length - 2); 
     let currentCount = parseInt(localStorage.getItem(baseKey) || 0);
     currentCount++;
     localStorage.setItem(baseKey, currentCount);
 
     let aggregationHtml = '<h4>🎉 この端末での集計結果 🎉</h4><ul>';
-    const allBaseKeys = ['RED_TECH', 'RED_ENV', 'RED_OPT', 'RED_DATA', 'TECH_IT', 'TECH_PREV', 'TECH_STR', 'TECH_CONV', 'FIELD_REP', 'FIELD_FISH', 'FIELD_SAFE', 'FIELD_CON', 'MGT_FIN', 'MGT_ESG', 'MGT_PROC', 'MGT_EXEC'];
+    // 集計対象の系統のキーリスト（_Aを付加してresultからtitleを取得するのに使用）
+    const allBaseKeys = ['RED_TECH', 'RED_ENV', 'RED_OPT', 'RED_DATA', 'TECH_IT', 'TECH_PREV', 'TECH_STR', 'TECH_CONV', 'FIELD_REP', 'FIELD_FISH', 'FIELD_SAFE', 'FIELD_CON', 'MGT_EXEC', 'MGT_FIN', 'MGT_ESG', 'MGT_PROC'];
     
+    // 修正点: Local Storageから値を取得し、HTMLを組み立てる
     allBaseKeys.forEach(key => {
         const count = parseInt(localStorage.getItem(key) || 0);
-        // 系統名をresultsから取得 (最初のキーのtitleを使用)
+        // 系統名をresultsから取得
         const systemTitle = results[key + '_A'] ? results[key + '_A'].title : key; 
         if (count > 0) {
-            aggregationHtml += `<li><strong>${systemTitle}</strong>: ${count} 回</li>`;
+            aggregationHtml += `<li>${systemTitle}: ${count} 回</li>`;
         }
     });
     aggregationHtml += '</ul><p>※この集計は、このブラウザ内でのみ保存されます。</p>';
@@ -274,6 +275,4 @@ function restartQuiz() {
 
 // アプリ起動
 restartQuiz();
-// アプリ起動
 
-restartQuiz();

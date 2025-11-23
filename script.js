@@ -223,6 +223,47 @@ function handleAnswer(qId, choice) {
     }
 }
 
+
+// 集計結果のHTMLを構築するヘルパー関数
+function generateAggregationHtml(currentResultKey) {
+    let listItemsHtml = '';
+    let totalCount = 0;
+    
+    // 32種類の最終結果キーをリストアップ
+    const allResultKeys32 = [
+        'RED_TECH_A', 'RED_TECH_B', 'RED_ENV_A', 'RED_ENV_B', 'RED_OPT_A', 'RED_OPT_B', 'RED_DATA_A', 'RED_DATA_B',
+        'TECH_IT_A', 'TECH_IT_B', 'TECH_PREV_A', 'TECH_PREV_B', 'TECH_STR_A', 'TECH_STR_B', 'TECH_CONV_A', 'TECH_CONV_B',
+        'FIELD_REP_A', 'FIELD_REP_B', 'FIELD_FISH_A', 'FIELD_FISH_B', 'FIELD_SAFE_A', 'FIELD_SAFE_B', 'FIELD_CON_A', 'FIELD_CON_B',
+        'MGT_EXEC_A', 'MGT_EXEC_B', 'MGT_FIN_A', 'MGT_FIN_B', 'MGT_ESG_A', 'MGT_ESG_B', 'MGT_PROC_A', 'MGT_PROC_B'
+    ];
+    
+    allResultKeys32.forEach(key => {
+        const count = parseInt(localStorage.getItem(key) || '0');
+        totalCount += count;
+        
+        if (count > 0) {
+            // 職業名を取得
+            const jobName = results[key].name; 
+            // 今回選ばれた職業は強調 (太字なしなので、ここではシンプルに表示)
+            const isCurrent = (key === currentResultKey);
+            const displayTitle = isCurrent ? `★ ${jobName}` : jobName; 
+
+            listItemsHtml += `<li>${displayTitle}: ${count} 回</li>`;
+        }
+    });
+
+    if (totalCount === 0) {
+        return '<p>※最初の回答が完了しました。次回の回答から集計が表示されます。</p>';
+    } else {
+        let aggregationHtml = '<h4>🎉 この端末での集計結果 🎉</h4>';
+        aggregationHtml += `<ul>${listItemsHtml}</ul>`;
+        aggregationHtml += `<p>（合計: ${totalCount} 回）</p>`;
+        aggregationHtml += '<p>※この集計は、このブラウザ内でのみ保存されます。</p>';
+        return aggregationHtml;
+    }
+}
+
+
 // 最終結果を表示する関数
 function displayResult(resultKey) {
     const jobData = results[resultKey]; 
@@ -237,47 +278,16 @@ function displayResult(resultKey) {
         <p>【仕事内容】${jobData.detail}</p>
     `;
     
-    // jobDetailsにメイン結果を一旦設定
+    // 1. Local Storageに今回の結果を保存 (32種類のキーを使用)
+    let currentCount = parseInt(localStorage.getItem(resultKey) || '0');
+    currentCount++;
+    localStorage.setItem(resultKey, currentCount);
+
+    // 2. jobDetailsにメイン結果を設定
     jobDetails.innerHTML = mainResultHtml;
 
-    // --- Local Storageを使ったローカル集計 (修正箇所) ---
-    
-    // 1. 今回の結果をLocal Storageに保存
-    const baseKey = resultKey.substring(0, resultKey.length - 2); 
-    let currentCount = parseInt(localStorage.getItem(baseKey) || '0');
-    currentCount++;
-    localStorage.setItem(baseKey, currentCount);
-
-    // 2. 集計結果のHTMLを構築
-    let aggregationHtml = '<h4>🎉 この端末での集計結果 🎉</h4><ul>';
-    
-    // 集計対象の系統のキーリスト
-    const allBaseKeys = ['RED_TECH', 'RED_ENV', 'RED_OPT', 'RED_DATA', 'TECH_IT', 'TECH_PREV', 'TECH_STR', 'TECH_CONV', 'FIELD_REP', 'FIELD_FISH', 'FIELD_SAFE', 'FIELD_CON', 'MGT_EXEC', 'MGT_FIN', 'MGT_ESG', 'MGT_PROC'];
-    
-    let totalCount = 0;
-
-    allBaseKeys.forEach(key => {
-        const count = parseInt(localStorage.getItem(key) || '0');
-        totalCount += count;
-        
-        // 系統名を取得（_Aを付加してresultsからtitleを取得）
-        const systemTitle = results[key + '_A'] ? results[key + '_A'].title : key; 
-        
-        if (count > 0) {
-            // カウントが0より大きいものだけリストに追加
-            aggregationHtml += `<li>${systemTitle}: ${count} 回</li>`;
-        }
-    });
-
-    if (totalCount === 0) {
-        // 合計が0の場合は表示しないか、特別なメッセージを表示
-        aggregationHtml = '<p>※最初の回答が完了しました。次回の回答から集計が表示されます。</p>';
-    } else {
-        // リストを閉じ、注意書きを追加
-        aggregationHtml += '</ul><p>※この集計は、このブラウザ内でのみ保存されます。</p>';
-    }
-
-    // 3. jobDetailsに集計結果を追記
+    // 3. 集計結果をjobDetailsに追記
+    const aggregationHtml = generateAggregationHtml(resultKey);
     jobDetails.innerHTML += aggregationHtml;
 
     // 表示を切り替え
@@ -294,3 +304,4 @@ function restartQuiz() {
 
 // アプリ起動
 restartQuiz();
+

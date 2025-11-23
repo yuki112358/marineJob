@@ -1,3 +1,11 @@
+// 32種類の最終結果キーのグローバルリスト
+const allResultKeys32 = [
+    'RED_TECH_A', 'RED_TECH_B', 'RED_ENV_A', 'RED_ENV_B', 'RED_OPT_A', 'RED_OPT_B', 'RED_DATA_A', 'RED_DATA_B',
+    'TECH_IT_A', 'TECH_IT_B', 'TECH_PREV_A', 'TECH_PREV_B', 'TECH_STR_A', 'TECH_STR_B', 'TECH_CONV_A', 'TECH_CONV_B',
+    'FIELD_REP_A', 'FIELD_REP_B', 'FIELD_FISH_A', 'FIELD_FISH_B', 'FIELD_SAFE_A', 'FIELD_SAFE_B', 'FIELD_CON_A', 'FIELD_CON_B',
+    'MGT_EXEC_A', 'MGT_EXEC_B', 'MGT_FIN_A', 'MGT_FIN_B', 'MGT_ESG_A', 'MGT_ESG_B', 'MGT_PROC_A', 'MGT_PROC_B'
+];
+
 // 🌳 質問の樹形図（分岐ロジック）
 const quizTree = {
     // STARTノード：最初の質問でターゲット層を分ける
@@ -62,29 +70,23 @@ const quizTree = {
     'Q4_EH_BBA': { q: "Q4. 会社の司令塔として、何を動かす？", A: { text: "新しいアイデアの計画を立てる", next: 'Q5_EH_M' }, B: { text: "お金の流れをチェックし、会社を守る", next: 'Q5_EH_N' } },
     'Q4_EH_BBB': { q: "Q4. 地球と会社のために、何を頑張る？", A: { text: "環境に優しい会社のルールを作る", next: 'Q5_EH_O' }, B: { text: "世界中から道具を集めること", next: 'Q5_EH_P' } },
 
-    // RED系 Q5_EH (研究)
-    'Q5_EH_A': { q: "Q5. 最終判断！誰もできないことに挑戦するなら？", A: { text: "AIに船の操縦を覚えさせる", result: 'RED_TECH_A' }, B: { text: "水を燃料に変える 魔法を考える", result: 'RED_TECH_B' } },
-    'Q5_EH_B': { q: "Q5. 最終判断！海の守り神として、どちらの力を使う？", A: { text: "どんな波でも船を壊れさせない技術", result: 'RED_ENV_A' }, B: { text: "工場で出る汚い水を透明にする", result: 'RED_ENV_B' } },
-    'Q5_EH_C': { q: "Q5. 最終判断！船のルートを考えるとき、何を信じる？", A: { text: "スーパーコンピューターの計算", result: 'RED_OPT_A' }, B: { text: "海のデータから一番速い道を発見", result: 'RED_OPT_B' } },
-    'Q5_EH_D': { q: "Q5. 最終判断！海の情報を扱うとき、何をしたい？", A: { text: "海と全く同じ世界をパソコンに作る", result: 'RED_DATA_A' }, B: { text: "AIの目で船の前の危険を察知", result: 'RED_DATA_B' } },
-    
-    // TECH系 Q5_EH (技術)
-    'Q5_EH_E': { q: "Q5. 最終判断！道具を作るとき、何を一番大切にする？", A: { text: "魚や物**を正確に見つけるカメラの目", result: 'TECH_IT_A' }, B: { text: "船の電気やモーターの仕組み作り", result: 'TECH_IT_B' } },
-    'Q5_EH_F': { q: "Q5. 最終判断！機械のお医者さんとして、どちらが目標？", A: { text: "病気になる前に警告するシステム", result: 'TECH_PREV_A' }, B: { text: "壊れたエンジンをプロの腕で修理", result: 'TECH_PREV_B' } },
-    'Q5_EH_G': { q: "Q5. 最終判断！大きな設計図を描くとき、どちらに興奮する？", A: { text: "大きな船の形と、進むための羽（スクリュー）", result: 'TECH_STR_A' }, B: { text: "海の底に立つ、風車の土台の設計", result: 'TECH_STR_B' } },
-    'Q5_EH_H': { q: "Q5. 最終判断！古い船を蘇らせるとき、何に挑戦する？", A: { text: "古い機械を新しいエンジン**に付け替える", result: 'TECH_CONV_A' }, B: { text: "海の風をうまく使う大きな羽根（タービン）を作る", result: 'TECH_CONV_B' } },
-
-    // FIELD系 Q5_EH (現場)
-    'Q5_EH_I': { q: "Q5. 最終判断！海の安全を守るとき、どちらがあなたの役目？", A: { text: "船のリーダーとして、冷静に運転と指示を出す", result: 'FIELD_SAFE_A' }, B: { text: "事故が起きないように、安全な仕組みを考える", result: 'FIELD_SAFE_B' } },
-    'Q5_EH_J': { q: "Q5. 最終判断！海の食べ物について、どちらが楽しい？", A: { text: "高性能な機械を使い、魚を獲るオペレーションをする", result: 'FIELD_FISH_A' }, B: { text: "魚や海藻を増やし、大事に育てる", result: 'FIELD_FISH_B' } },
-    'Q5_EH_K': { q: "Q5. 最終判断！壊れた物を直すとき、どんな技術を使う？", A: { text: "船のキズや故障を時間をかけて丁寧になくす", result: 'FIELD_REP_A' }, B: { text: "専門の道具で、船の損傷を完璧に修理する", result: 'FIELD_REP_B' } },
-    'Q5_EH_L': { q: "Q5. 最終判断！海での作業は、どちらが刺激的？", A: { text: "ロボットを操作して、海の底で作業する", result: 'FIELD_CON_A' }, B: { text: "高い場所にある風車の設備を点検する", result: 'FIELD_CON_B' } },
-
-    // MGT系 Q5_EH (管理)
+    // Stage 5 (Q5_EH) - 小学生向けに簡略化
+    'Q5_EH_A': { q: "Q5. 最終判断！誰もできないことに挑戦するなら？", A: { text: "AIを使った無人運航システムの実現", result: 'RED_TECH_A' }, B: { text: "アンモニアなど、環境に優しい新燃料の研究", result: 'RED_TECH_B' } },
+    'Q5_EH_B': { q: "Q5. 最終判断！海の守り神として、どちらの力を使う？", A: { text: "船の構造が壊れないよう、材料を徹底的に調べる", result: 'RED_ENV_A' }, B: { text: "船から出る熱やゴミを減らす技術を研究する", result: 'RED_ENV_B' } },
+    'Q5_EH_C': { q: "Q5. 最終判断！船のルートを考えるとき、何を信じる？", A: { text: "コンピューターで船の動きを計算し航路を提案", result: 'RED_OPT_A' }, B: { text: "海のデータから一番速い道を発見", result: 'RED_OPT_B' } },
+    'Q5_EH_D': { q: "Q5. 最終判断！海の情報を扱うとき、何をしたい？", A: { text: "現実の海をコンピューターに再現する開発", result: 'RED_DATA_A' }, B: { text: "AIの目で船の前の危険を察知", result: 'RED_DATA_B' } },
+    'Q5_EH_E': { q: "Q5. 最終判断！道具を作るとき、何を一番大切にする？", A: { text: "魚や物を正確に見つけるカメラの目", result: 'TECH_IT_A' }, B: { text: "船の電気やモーターの仕組み作り", result: 'TECH_IT_B' } },
+    'Q5_EH_F': { q: "Q5. 最終判断！機械のお医者さんとして、どちらが目標？", A: { text: "センサーで故障を予測するシステム開発", result: 'TECH_PREV_A' }, B: { text: "船のエンジンや機械の点検・修理を行う専門家", result: 'TECH_PREV_B' } },
+    'Q5_EH_G': { q: "Q5. 最終判断！大きな設計図を描くとき、どちらに興奮する？", A: { text: "船の形やスクリュー（推進器）を設計", result: 'TECH_STR_A' }, B: { text: "洋上風力発電の土台（基礎構造物）を設計", result: 'TECH_STR_B' } },
+    'Q5_EH_H': { q: "Q5. 最終判断！古い船を蘇らせるとき、何に挑戦する？", A: { text: "古い機械を新しいエンジンに付け替える", result: 'TECH_CONV_A' }, B: { text: "海の風をうまく使う大きな羽根（タービン）を作る", result: 'TECH_CONV_B' } },
+    'Q5_EH_I': { q: "Q5. 最終判断！海の安全を守るとき、どちらがあなたの役目？", A: { text: "船を操縦し目的地へ運ぶ海のリーダー（船長など）", result: 'FIELD_SAFE_A' }, B: { text: "船や設備の安全性を確保するための計画を立てる", result: 'FIELD_SAFE_B' } },
+    'Q5_EH_J': { q: "Q5. 最終判断！海の食べ物について、どちらが楽しい？", A: { text: "高性能な機械を使い、魚を獲るオペレーションをする", result: 'FIELD_FISH_A' }, B: { text: "魚や海藻などを育て、成長を管理し、病気にならないように世話をする", result: 'FIELD_FISH_B' } },
+    'Q5_EH_K': { q: "Q5. 最終判断！修繕・メンテナンス職人として、どちらの技術を使う？", A: { text: "船のキズや故障を時間をかけて丁寧に直す", result: 'FIELD_REP_A' }, B: { text: "専門の道具で、船の損傷を完璧に修理する", result: 'FIELD_REP_B' } },
+    'Q5_EH_L': { q: "Q5. 最終判断！海洋建設・設置作業員として、どちらに興味がありますか？", A: { text: "遠隔操作のロボットで海底の建設作業", result: 'FIELD_CON_A' }, B: { text: "高い場所にある風車の設備を点検する", result: 'FIELD_CON_B' } },
     'Q5_EH_M': { q: "Q5. 最終判断！会社を動かすために、どちらを目標にする？", A: { text: "みんなの意見を聞いて、事業全体をまとめる", result: 'MGT_EXEC_A' }, B: { text: "環境に優しい事業が、本当に良いかを証明する", result: 'MGT_EXEC_B' } },
-    'Q5_EH_N': { q: "Q5. 最終判断！お金を管理するとき、どんな能力を使う？", A: { text: "会社の財布をしっかり守り、予算を管理する", result: 'MGT_FIN_A' }, B: { text: "新しい計画が成功するか、失敗するかを予測する", result: 'MGT_FIN_B' } },
+    'Q5_EH_N': { q: "Q5. 最終判断！お金を管理するとき、どんな能力を使う？", A: { text: "会社の予算や資金を管理しお金の流れをコントロール", result: 'MGT_FIN_A' }, B: { text: "新しい事業が儲かるかどうか分析・評価", result: 'MGT_FIN_B' } },
     'Q5_EH_O': { q: "Q5. 最終判断！海のルールを守るとき、どちらに挑戦する？", A: { text: "CO2を減らすための、特別なお金の仕組みを考える", result: 'MGT_ESG_A' }, B: { text: "環境に優しい会社だと、世界に認めてもらう", result: 'MGT_ESG_B' } },
-    'Q5_EH_P': { q: "Q5. 最終判断！必要な物を集めるとき、どちらが得意？", A: { text: "部品を作る会社と協力し、無駄をなくす", result: 'MGT_PROC_A' }, B: { text: "世界中から、一番良いハイテク部品を探し出す", result: 'MGT_PROC_B' } },
+    'Q5_EH_P': { q: "Q5. 最終判断！必要な物を集めるとき、どちらが得意？", A: { text: "部品を作る会社と協力し効率を上げる", result: 'MGT_PROC_A' }, B: { text: "世界中から、一番良いハイテク部品を探し出す", result: 'MGT_PROC_B' } },
 
 
     // ----------------------------------------------------
@@ -100,7 +102,7 @@ const quizTree = {
     'Q4_AAA': { q: "Q4. 未来の技術のなかで、特に力を入れたいのは？", A: { text: "AIや自動運航データの解析。", next: 'Q5_A' }, B: { text: "脱炭素燃料や環境技術の研究。", next: 'Q5_B' } },
     'Q4_AAB': { q: "Q4. 研究テーマは？", A: { text: "船の構造や材料の「耐久性」や「腐食」を防ぐ研究。", next: 'Q5_C' }, B: { text: "船の航路や安全性を高めるための「データ分析」。", next: 'Q5_D' } },
     'Q4_ABA': { q: "Q4. 開発したいのは？", A: { text: "AIカメラなど「自動化・IT」機器。", next: 'Q5_E' }, B: { text: "故障を予測する「予防保全」システム。", next: 'Q5_F' } },
-    'Q4_ABB': { q: "Q4. どちらの設計が得意？", A: { text: "船の構造や推進器など「構造・推進」。", next: 'Q5_G' }, B: { text: "古い船を新しいシステムに「改造・転換」させる。", next: 'Q5_H' } },
+    'Q4_ABB': { q: "Q4. どちらの設計が得意？", A: { text: "船の構造や推進器など「構造・推進」。", next: 'Q5_G' }, B: { text: "洋上風力発電の土台（基礎構造物）を設計", next: 'Q5_H' } },
     'Q4_BAA': { q: "Q4. 現場で貢献したいのは？", A: { text: "船を安全に運航させる「船長・運航」の役割。", next: 'Q5_I' }, B: { text: "魚や海藻を育てる「漁業・養殖」の管理。", next: 'Q5_J' } },
     'Q4_BAB': { q: "Q4. 現場技術のテーマは？", A: { text: "壊れた船や設備を「修理・メンテナンス」する。", next: 'Q5_K' }, B: { text: "洋上風力などの「建設・設置工事」を行う。", next: 'Q5_L' } },
     'Q4_BBA': { q: "Q4. 管理したいのは？", A: { text: "新しい事業を立ち上げるための「計画・評価」。", next: 'Q5_M' }, B: { text: "会社全体の「財務・経理」や「資金」の流れ。", next: 'Q5_N' } },
@@ -108,7 +110,7 @@ const quizTree = {
     'Q5_A': { q: "Q5. 最終判断！【未来技術の研究者】として、より情熱を注ぎたいのは？", A: { text: "AIを使った無人運航システムの実現", result: 'RED_TECH_A' }, B: { text: "アンモニアなど、環境に優しい新燃料の研究", result: 'RED_TECH_B' } },
     'Q5_B': { q: "Q5. 最終判断！【海洋環境の分析家】として、より情熱を注ぎたいのは？", A: { text: "船の構造が壊れないよう、材料を徹底的に調べる", result: 'RED_ENV_A' }, B: { text: "船から出る熱やゴミを減らす技術を研究する", result: 'RED_ENV_B' } },
     'Q5_C': { q: "Q5. 最終判断！【運航の最適化専門家】として、どちらに興味がありますか？", A: { text: "コンピューターで船の動きを計算し航路を提案", result: 'RED_OPT_A' }, B: { text: "データを使って最適な船のルートを設計", result: 'RED_OPT_B' } },
-    'Q5_D': { q: "Q5. 最終判断！【海洋データ解析技術者】として、どちらに興味がありますか？", A: { text: "現実の海をコンピューターに再現する開発", result: 'RED_DATA_A' }, B: { text: "AIが船をサポートする画像認識技術の開発", result: 'RED_DATA_B' } },
+    'Q5_D': { q: "Q5. 最終判断！【海洋データ解析技術者】として、どちらに興味がありますか？", A: { text: "現実の船や海をコンピューターに再現する開発", result: 'RED_DATA_A' }, B: { text: "AIが船をサポートする画像認識技術の開発", result: 'RED_DATA_B' } },
     'Q5_E': { q: "Q5. 最終判断！【自動化システムの設計者】として、どちらに興味がありますか？", A: { text: "高性能なAIカメラの製造・開発", result: 'TECH_IT_A' }, B: { text: "船の電気系統や自動で動く機械の製造", result: 'TECH_IT_B' } },
     'Q5_F': { q: "Q5. 最終判断！【IoT予防保全エンジニア】として、どちらに興味がありますか？", A: { text: "センサーで故障を予測するシステム開発", result: 'TECH_PREV_A' }, B: { text: "船のエンジンや機械の点検・修理を行う専門家", result: 'TECH_PREV_B' } },
     'Q5_G': { q: "Q5. 最終判断！【巨大設備の設計技術者】として、どちらに興味がありますか？", A: { text: "船の形やスクリュー（推進器）を設計", result: 'TECH_STR_A' }, B: { text: "洋上風力発電の土台（基礎構造物）を設計", result: 'TECH_STR_B' } },
@@ -165,6 +167,14 @@ const results = {
     'MGT_EXEC_A': { title: "分野横断の経営管理者", desc: "会社全体を見渡し、様々な部門や行政との連携をとり、事業を成功に導くリーダー。", name: "分野横断（マネジメント・事業・行政）", detail: "会社全体を見渡し、様々な部門や行政との連携をとり、事業を成功に導く。" },
     'MGT_EXEC_B': { title: "分野横断の経営管理者", desc: "事業が環境に与える影響を評価し、対策を立てる専門家。", name: "環境アセスメント担当官", detail: "事業が環境に与える影響を評価し、対策を立てる専門家。" }
 };
+
+// 32種類の最終結果キーのグローバルリスト
+const allResultKeys32 = [
+    'RED_TECH_A', 'RED_TECH_B', 'RED_ENV_A', 'RED_ENV_B', 'RED_OPT_A', 'RED_OPT_B', 'RED_DATA_A', 'RED_DATA_B',
+    'TECH_IT_A', 'TECH_IT_B', 'TECH_PREV_A', 'TECH_PREV_B', 'TECH_STR_A', 'TECH_STR_B', 'TECH_CONV_A', 'TECH_CONV_B',
+    'FIELD_REP_A', 'FIELD_REP_B', 'FIELD_FISH_A', 'FIELD_FISH_B', 'FIELD_SAFE_A', 'FIELD_SAFE_B', 'FIELD_CON_A', 'FIELD_CON_B',
+    'MGT_EXEC_A', 'MGT_EXEC_B', 'MGT_FIN_A', 'MGT_FIN_B', 'MGT_ESG_A', 'MGT_ESG_B', 'MGT_PROC_A', 'MGT_PROC_B'
+];
 
 let currentQuestionId = 'START'; 
 let answeredCount = 0;
@@ -223,20 +233,63 @@ function handleAnswer(qId, choice) {
     }
 }
 
+// 集計結果のHTMLを構築するヘルパー関数
+function generateAggregationHtml(currentResultKey) {
+    let listItemsHtml = '';
+    let totalCount = 0;
+    
+    allResultKeys32.forEach(key => {
+        const count = parseInt(localStorage.getItem(key) || '0');
+        totalCount += count;
+        
+        if (count > 0) {
+            // 職業名を取得
+            const jobName = results[key].name; 
+            // 今回選ばれた職業は強調 (太字なしなので、ここではシンプルに表示)
+            const isCurrent = (key === currentResultKey);
+            const displayTitle = isCurrent ? `★ ${jobName}` : jobName; 
+
+            listItemsHtml += `<li>${displayTitle}: ${count} 回</li>`;
+        }
+    });
+
+    if (totalCount === 0) {
+        return '<p>※最初の回答が完了しました。次回の回答から集計が表示されます。</p>';
+    } else {
+        let aggregationHtml = '<h4>🎉 この端末での集計結果 🎉</h4>';
+        aggregationHtml += `<ul>${listItemsHtml}</ul>`;
+        aggregationHtml += `<p>（合計: ${totalCount} 回）</p>`;
+        aggregationHtml += '<p>※この集計は、このブラウザ内でのみ保存されます。</p>';
+        return aggregationHtml;
+    }
+}
+
+
 // 最終結果を表示する関数
 function displayResult(resultKey) {
     const jobData = results[resultKey]; 
     
     // 系統名 (title) と説明をセット
-    // 修正点1: <strong>タグを削除し、通常の表示にする
     resultText.innerHTML = `あなたの適性は ${jobData.title} の系統です！<br>${jobData.desc}`;
 
     // 最終的にたどり着いた職業を詳細表示
-    jobDetails.innerHTML = `
+    let mainResultHtml = `
         <h4>🌟 あなたにおすすめの海の仕事 🌟</h4>
         <h3>${jobData.name}</h3>
         <p>【仕事内容】${jobData.detail}</p>
     `;
+    
+    // 1. Local Storageに今回の結果を保存 (32種類のキーを使用)
+    let currentCount = parseInt(localStorage.getItem(resultKey) || '0');
+    currentCount++;
+    localStorage.setItem(resultKey, currentCount);
+
+    // 2. jobDetailsにメイン結果を設定
+    jobDetails.innerHTML = mainResultHtml;
+
+    // 3. 集計結果をjobDetailsに追記
+    const aggregationHtml = generateAggregationHtml(resultKey);
+    jobDetails.innerHTML += aggregationHtml;
 
     // 表示を切り替え
     quizContainer.classList.add('hidden');
